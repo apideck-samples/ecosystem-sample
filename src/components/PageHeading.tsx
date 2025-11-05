@@ -3,9 +3,10 @@ import { ReactNode } from 'react'
 interface Props {
   title: string
   description?: string | ReactNode
+  action?: ReactNode
 }
 
-const PageHeading = ({ title, description }: Props) => {
+const PageHeading = ({ title, description, action }: Props) => {
   return (
     <div className="md:flex md:items-center md:justify-between xl:py-2">
       <div className="flex-1 min-w-0">
@@ -24,6 +25,11 @@ const PageHeading = ({ title, description }: Props) => {
           </p>
         )}
       </div>
+      {action && (
+        <div className="mt-4 flex md:mt-0 md:ml-4">
+          {action}
+        </div>
+      )}
     </div>
   )
 }

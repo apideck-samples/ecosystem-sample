@@ -6,9 +6,9 @@ import {
   HiHome,
   HiMenu,
   HiOutlineBookOpen,
+  HiOutlineCode,
   HiOutlineExternalLink,
   HiOutlinePlus,
-  HiOutlineUserGroup,
   HiOutlineViewGrid,
   HiX
 } from 'react-icons/hi'
@@ -16,8 +16,6 @@ import {
 import classNames from 'classnames'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import ConsumerDropdown from './ConsumerDropdown'
-import SelectConnection from './SelectConnection'
 
 interface Props {
   children: ReactNode
@@ -30,14 +28,14 @@ const items = [
     icon: HiHome
   },
   {
-    name: 'Customers (example)',
-    href: `/customers`,
-    icon: HiOutlineUserGroup
+    name: 'Embed',
+    href: `/embed`,
+    icon: HiOutlineViewGrid
   },
   {
-    name: 'Ecosystem',
-    href: `/ecosystem`,
-    icon: HiOutlineViewGrid
+    name: 'Custom',
+    href: `/custom`,
+    icon: HiOutlineCode
   },
   {
     name: 'More samples',
@@ -107,9 +105,6 @@ const SidebarLayout = ({ children }: Props) => {
                   <div className="flex-shrink-0 flex items-center px-4">
                     <img className="h-8 w-auto" src="/img/logo-white.svg" alt="Workflow" />
                   </div>
-                  <div className="flex-shrink-0 flex border-b border-ui-600 px-3 py-4">
-                    <SelectConnection />
-                  </div>
                   <nav className="mt-5 px-2 space-y-1">
                     {items.map((item) => {
                       return (
@@ -130,9 +125,6 @@ const SidebarLayout = ({ children }: Props) => {
                     })}
                   </nav>
                 </div>
-                <div className="flex-shrink-0 flex border-t border-ui-600 p-4">
-                  <ConsumerDropdown />
-                </div>
               </div>
             </Transition.Child>
             <div className="flex-shrink-0 w-14" aria-hidden="true">
@@ -148,10 +140,7 @@ const SidebarLayout = ({ children }: Props) => {
               <div className="flex items-center flex-shrink-0 px-4">
                 <img className="h-6 w-auto" src="/img/logo-white.svg" alt="Apideck" />
               </div>
-              <span className="text-xs text-white px-4 pt-1">Sample Starter Kit</span>
-              <div className="flex-shrink-0 flex border-b border-ui-600 px-3 py-4">
-                <SelectConnection />
-              </div>
+              <span className="text-xs text-white px-4 pt-1">Ecosystem Starter Kit</span>
               <nav className="mt-5 flex-1 px-3 space-y-1">
                 {items.map((item) => {
                   return (
@@ -187,9 +176,6 @@ const SidebarLayout = ({ children }: Props) => {
                   )
                 })}
               </nav>
-            </div>
-            <div className="flex-shrink-0 flex border-t border-ui-600 p-2 min-h-[69px]">
-              <ConsumerDropdown />
             </div>
           </div>
         </div>

@@ -30,8 +30,8 @@ const basierCircle = localFont({
 })
 
 export const metadata = {
-  title: 'Apideck - Account Sample',
-  description: 'A sample project demonstrating the use of the Apideck Accounting API',
+  title: 'Apideck - Ecosystem Starter Kit',
+  description: 'A starter kit demonstrating how to integrate Apideck Ecosystem using embed and API approaches',
   icons: {
     icon: '/img/logo.png'
   }
