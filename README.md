@@ -158,6 +158,28 @@ The embed page demonstrates how to integrate Apideck Ecosystem using an iframe. 
 - Full-screen iframe viewer with navigation controls
 - Loading states and transitions
 - Demonstrates the `?embed=true` parameter for optimized embedding
+- **URL Parameter Support**: Link directly to a specific ecosystem by adding `?ecosystemId=YOUR_ECOSYSTEM_ID` to the URL
+
+**Direct linking example:**
+
+Share a direct link to your ecosystem with customers:
+
+```
+https://your-app.com/embed?ecosystemId=cjm81i5c9wnbl0931dvhgawzu
+```
+
+**Session-based Preview Mode:**
+
+When an `ecosystemId` parameter is provided:
+
+- The ecosystem selector is automatically hidden
+- Only the specified ecosystem is displayed
+- The session is stored in `sessionStorage` and persists across page navigation
+- All internal navigation links automatically preserve the ecosystem context
+- The home page shows a preview mode banner with the ecosystem name
+- Perfect for customers to preview their specific ecosystem without seeing other options
+
+This means if a customer lands on `/embed?ecosystemId=X`, they can navigate to `/custom` or any other page and the ecosystem context is maintained throughout their session.
 
 **Basic implementation:**
 
@@ -184,6 +206,17 @@ The custom page demonstrates how to build your own integration marketplace using
 - Dynamic variable injection (e.g., `%ecosystem%`, `%listing_naming%`)
 - Optimized Cloudinary image handling
 - Smart text color detection for light/dark backgrounds
+- **URL Parameter Support**: Link directly to a specific ecosystem by adding `?ecosystemId=YOUR_ECOSYSTEM_ID` to the URL
+
+**Direct linking example:**
+
+Share a direct link to showcase a specific ecosystem:
+
+```
+https://your-app.com/custom?ecosystemId=cjm81i5c9wnbl0931dvhgawzu
+```
+
+When an `ecosystemId` parameter is provided, the ecosystem selector is hidden and only the specified ecosystem&apos;s custom integration view is displayed. Like the embed page, the ecosystem context persists across navigation throughout the session.
 
 **API Usage:**
 

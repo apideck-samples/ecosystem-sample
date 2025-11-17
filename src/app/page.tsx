@@ -2,13 +2,42 @@
 
 import Layout from '@/components/Layout'
 import PageHeading from '@/components/PageHeading'
+import { PREVIEW_ECOSYSTEMS } from '@/constants/preview-ecosystems'
+import { useEcosystemSession } from '@/utils/useEcosystemSession'
 import Link from 'next/link'
 import { HiOutlineCode, HiOutlineViewGrid } from 'react-icons/hi'
 
 export default function HomePage() {
+  const { ecosystemId, isPreviewMode } = useEcosystemSession()
+
+  // Find the ecosystem name if in preview mode
+  const previewEcosystem = isPreviewMode
+    ? PREVIEW_ECOSYSTEMS.find((eco) => eco.ecosystemId === ecosystemId)
+    : null
+
   return (
     <Layout>
       <div className="space-y-6">
+        {isPreviewMode && previewEcosystem && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <HiOutlineViewGrid className="h-5 w-5 text-blue-600" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-blue-800">Preview Mode Active</h3>
+                <div className="mt-2 text-sm text-blue-700">
+                  <p>
+                    You&apos;re currently previewing the ecosystem for{' '}
+                    <span className="font-semibold">{previewEcosystem.name}</span>. All pages will
+                    display this ecosystem&apos;s content.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <PageHeading
           title="Apideck Ecosystem Starter Kit"
           description="Choose how you want to integrate Apideck Ecosystem into your application"

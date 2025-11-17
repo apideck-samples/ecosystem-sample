@@ -1,7 +1,8 @@
 'use client'
 
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, ReactNode, useState } from 'react'
+import { Fragment, ReactNode, useEffect, useState } from 'react'
+import { FaGithub } from 'react-icons/fa'
 import {
   HiHome,
   HiMenu,
@@ -53,7 +54,20 @@ const items = [
 
 const SidebarLayout = ({ children }: Props) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [ecosystemId, setEcosystemId] = useState<string | null>(null)
   const pathname = usePathname()
+
+  // Check for ecosystem session on mount and when pathname changes
+  useEffect(() => {
+    const storedId = sessionStorage.getItem('apideck_ecosystem_preview_id')
+    setEcosystemId(storedId)
+  }, [pathname])
+
+  // Helper to add ecosystemId to internal links
+  const getHrefWithEcosystem = (href: string, isExternal?: boolean) => {
+    if (isExternal || !ecosystemId) return href
+    return `${href}?ecosystemId=${ecosystemId}`
+  }
 
   return (
     <>
@@ -101,16 +115,17 @@ const SidebarLayout = ({ children }: Props) => {
                     </button>
                   </div>
                 </Transition.Child>
-                <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto custom-scrollbar-dark">
+                <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto custom-scrollbar-dark flex flex-col">
                   <div className="flex-shrink-0 flex items-center px-4">
                     <img className="h-8 w-auto" src="/img/logo-white.svg" alt="Workflow" />
                   </div>
-                  <nav className="mt-5 px-2 space-y-1">
+                  <nav className="mt-5 px-2 space-y-1 flex-1">
                     {items.map((item) => {
+                      const href = getHrefWithEcosystem(item.href, item.external)
                       return (
                         <Link
                           key={item.name}
-                          href={item.href}
+                          href={href}
                           target={item.external ? '_blank' : '_self'}
                           className={classNames(
                             pathname === item.href
@@ -124,6 +139,18 @@ const SidebarLayout = ({ children }: Props) => {
                       )
                     })}
                   </nav>
+                  <div className="px-2 pb-2">
+                    <a
+                      href="https://github.com/apideck-samples/ecosystem-sample"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center justify-center px-3 py-2.5 text-sm rounded border border-ui-500 text-white hover:bg-ui-500 transition-colors"
+                    >
+                      <FaGithub className="mr-2 h-4 w-4" />
+                      <span>View on GitHub</span>
+                      <HiOutlineExternalLink className="ml-2 h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </Transition.Child>
@@ -143,10 +170,11 @@ const SidebarLayout = ({ children }: Props) => {
               <span className="text-xs text-white px-4 pt-1">Ecosystem Starter Kit</span>
               <nav className="mt-5 flex-1 px-3 space-y-1">
                 {items.map((item) => {
+                  const href = getHrefWithEcosystem(item.href, item.external)
                   return (
                     <Link
                       key={item.name}
-                      href={item.href}
+                      href={href}
                       target={item.external ? '_blank' : '_self'}
                       className={classNames(
                         pathname === item.href
@@ -176,6 +204,19 @@ const SidebarLayout = ({ children }: Props) => {
                   )
                 })}
               </nav>
+              {/* GitHub Link */}
+              <div className="px-3 pb-4">
+                <a
+                  href="https://github.com/apideck-samples/ecosystem-starter-kit"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-center px-3 py-2.5 text-sm rounded border border-ui-500 text-white hover:bg-ui-500 transition-colors"
+                >
+                  <FaGithub className="mr-2 h-4 w-4" />
+                  <span>View on GitHub</span>
+                  <HiOutlineExternalLink className="ml-2 h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+              </div>
             </div>
           </div>
         </div>

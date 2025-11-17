@@ -8,18 +8,32 @@ import Spinner from '@/components/Spinner'
 import Listings from '@/components/listings/Listings'
 import { capitalizeFirst, getListingName } from '@/utils/ecosystem-utils'
 import { useEcosystem } from '@/utils/useEcosystem'
-import { useState } from 'react'
+import { useEcosystemSession } from '@/utils/useEcosystemSession'
+import { useEffect, useState } from 'react'
 import { HiExclamation, HiExternalLink } from 'react-icons/hi'
 
 export default function CustomIntegrationPage() {
-  const [ecosystemId, setEcosystemId] = useState('')
+  const { ecosystemId: sessionEcosystemId, isPreviewMode } = useEcosystemSession()
+
+  const [ecosystemId, setEcosystemId] = useState(sessionEcosystemId || '')
   const { data: ecosystem, isLoading, error } = useEcosystem(ecosystemId || null)
+
+  // Sync with session ecosystem ID when it changes (only if different)
+  useEffect(() => {
+    if (sessionEcosystemId && sessionEcosystemId !== ecosystemId) {
+      setEcosystemId(sessionEcosystemId)
+    }
+  }, [sessionEcosystemId]) // Only depend on sessionEcosystemId to avoid loops
 
   return (
     <Layout>
       <PageHeading
         title="Custom Integration"
-        description="Build your own custom integration marketplace using the Ecosystem API"
+        description={
+          isPreviewMode
+            ? `Previewing custom integration${ecosystem ? ` for ${ecosystem.name}` : ''}`
+            : 'Build your own custom integration marketplace using the Ecosystem API'
+        }
         action={
           <a
             href="https://raw.githubusercontent.com/apideck-libraries/openapi-specs/main/ecosystem.yml"
@@ -33,9 +47,11 @@ export default function CustomIntegrationPage() {
         }
       />
 
-      <div className="my-4">
-        <EcosystemSelector value={ecosystemId} onChange={setEcosystemId} mode="id" />
-      </div>
+      {!isPreviewMode && (
+        <div className="my-4">
+          <EcosystemSelector value={ecosystemId} onChange={setEcosystemId} mode="id" />
+        </div>
+      )}
 
       {ecosystemId ? (
         <>

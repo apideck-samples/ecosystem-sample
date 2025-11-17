@@ -5,13 +5,29 @@ import Layout from '@/components/Layout'
 import PageHeading from '@/components/PageHeading'
 import Spinner from '@/components/Spinner'
 import { PREVIEW_ECOSYSTEMS } from '@/constants/preview-ecosystems'
-import { useState } from 'react'
+import { useEcosystemSession } from '@/utils/useEcosystemSession'
+import { useEffect, useState } from 'react'
 
 export default function EmbedPage() {
-  // Default to Apideck ecosystem (first in array)
-  const defaultEcosystem = PREVIEW_ECOSYSTEMS[0]
+  const { ecosystemId: sessionEcosystemId, isPreviewMode } = useEcosystemSession()
+
+  // If ecosystemId is provided in session, find the matching ecosystem
+  const matchedEcosystem = sessionEcosystemId
+    ? PREVIEW_ECOSYSTEMS.find((eco) => eco.ecosystemId === sessionEcosystemId)
+    : null
+
+  // Default to Apideck ecosystem (first in array) or matched ecosystem
+  const defaultEcosystem = matchedEcosystem || PREVIEW_ECOSYSTEMS[0]
   const [ecosystemUrl, setEcosystemUrl] = useState(defaultEcosystem.url)
   const [isLoading, setIsLoading] = useState(true)
+
+  // Update ecosystem URL when session ecosystem changes
+  useEffect(() => {
+    if (matchedEcosystem) {
+      setEcosystemUrl(matchedEcosystem.url)
+      setIsLoading(true)
+    }
+  }, [matchedEcosystem])
 
   function handleUrlChange(url: string) {
     setIsLoading(true)
@@ -30,12 +46,18 @@ export default function EmbedPage() {
       <div className="flex flex-col" style={{ height: 'calc(100vh - 4rem)' }}>
         <PageHeading
           title="Embed Ecosystem"
-          description="See how Apideck Ecosystem can be embedded directly into your application using an iframe"
+          description={
+            isPreviewMode
+              ? `Previewing ecosystem${currentEcosystem ? ` of ${currentEcosystem.name}` : ''}`
+              : 'See how Apideck Ecosystem can be embedded directly into your application using an iframe'
+          }
         />
 
-        <div className="my-4">
-          <EcosystemSelector value={ecosystemUrl} onChange={handleUrlChange} mode="url" />
-        </div>
+        {!isPreviewMode && (
+          <div className="my-4">
+            <EcosystemSelector value={ecosystemUrl} onChange={handleUrlChange} mode="url" />
+          </div>
+        )}
 
         {/* Iframe Content */}
         {ecosystemUrl ? (
