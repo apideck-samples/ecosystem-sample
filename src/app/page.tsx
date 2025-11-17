@@ -5,9 +5,10 @@ import PageHeading from '@/components/PageHeading'
 import { PREVIEW_ECOSYSTEMS } from '@/constants/preview-ecosystems'
 import { useEcosystemSession } from '@/utils/useEcosystemSession'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { HiOutlineCode, HiOutlineViewGrid } from 'react-icons/hi'
 
-export default function HomePage() {
+function HomePageContent() {
   const { ecosystemId, isPreviewMode } = useEcosystemSession()
 
   // Find the ecosystem name if in preview mode
@@ -142,5 +143,19 @@ export default function HomePage() {
         </div>
       </div>
     </Layout>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <Suspense
+      fallback={
+        <Layout>
+          <div className="flex items-center justify-center h-64">Loading...</div>
+        </Layout>
+      }
+    >
+      <HomePageContent />
+    </Suspense>
   )
 }

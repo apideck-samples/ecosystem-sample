@@ -9,10 +9,10 @@ import Listings from '@/components/listings/Listings'
 import { capitalizeFirst, getListingName } from '@/utils/ecosystem-utils'
 import { useEcosystem } from '@/utils/useEcosystem'
 import { useEcosystemSession } from '@/utils/useEcosystemSession'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { HiExclamation, HiExternalLink } from 'react-icons/hi'
 
-export default function CustomIntegrationPage() {
+function CustomIntegrationPageContent() {
   const { ecosystemId: sessionEcosystemId, isPreviewMode } = useEcosystemSession()
 
   const [ecosystemId, setEcosystemId] = useState(sessionEcosystemId || '')
@@ -94,5 +94,21 @@ export default function CustomIntegrationPage() {
         </div>
       )}
     </Layout>
+  )
+}
+
+export default function CustomIntegrationPage() {
+  return (
+    <Suspense
+      fallback={
+        <Layout>
+          <div className="flex items-center justify-center h-64">
+            <Spinner />
+          </div>
+        </Layout>
+      }
+    >
+      <CustomIntegrationPageContent />
+    </Suspense>
   )
 }

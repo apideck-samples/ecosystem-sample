@@ -6,9 +6,9 @@ import PageHeading from '@/components/PageHeading'
 import Spinner from '@/components/Spinner'
 import { PREVIEW_ECOSYSTEMS } from '@/constants/preview-ecosystems'
 import { useEcosystemSession } from '@/utils/useEcosystemSession'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
-export default function EmbedPage() {
+function EmbedPageContent() {
   const { ecosystemId: sessionEcosystemId, isPreviewMode } = useEcosystemSession()
 
   // If ecosystemId is provided in session, find the matching ecosystem
@@ -89,5 +89,21 @@ export default function EmbedPage() {
         )}
       </div>
     </Layout>
+  )
+}
+
+export default function EmbedPage() {
+  return (
+    <Suspense
+      fallback={
+        <Layout>
+          <div className="flex items-center justify-center h-64">
+            <Spinner />
+          </div>
+        </Layout>
+      }
+    >
+      <EmbedPageContent />
+    </Suspense>
   )
 }
